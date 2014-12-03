@@ -1,0 +1,9 @@
+<config>
+	<legend enable='true' position='left'/>
+    <data>
+        <set label="服务">
+        	<fan/>
+        </set>
+    </data>
+ </config>
+                

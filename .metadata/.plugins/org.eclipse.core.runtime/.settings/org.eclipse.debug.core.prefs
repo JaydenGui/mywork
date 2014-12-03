@@ -1,3 +1,3 @@
-#Wed Dec 03 15:46:16 CST 2014
-prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<watchExpressions>\r\n<expression enabled\="true" text\="productFile"/>\r\n<expression enabled\="true" text\="value"/>\r\n<expression enabled\="true" text\="this"/>\r\n<expression enabled\="true" text\="material"/>\r\n</watchExpressions>\r\n
+#Wed Dec 03 21:08:16 CST 2014
+prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<watchExpressions>\r\n<expression enabled\="true" text\="xml"/>\r\n<expression enabled\="true" text\="xml.set"/>\r\n<expression enabled\="true" text\="xml.@label"/>\r\n<expression enabled\="true" text\="p.name"/>\r\n<expression enabled\="true" text\="t.fan"/>\r\n<expression enabled\="true" text\="t.label"/>\r\n<expression enabled\="true" text\="t.@label"/>\r\n</watchExpressions>\r\n
 eclipse.preferences.version=1

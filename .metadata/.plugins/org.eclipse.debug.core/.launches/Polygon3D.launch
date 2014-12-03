@@ -2,7 +2,7 @@
 <launchConfiguration type="com.adobe.flexbuilder.debug.launchConfigurationType.flash">
 <stringAttribute key="com.adobe.flexbuilder.debug.ATTR_APPLICATION" value="src/Polygon3D.as"/>
 <stringAttribute key="com.adobe.flexbuilder.debug.ATTR_PROJECT" value="Charts"/>
-<stringAttribute key="com.adobe.flexbuilder.debug.ATTR_RUN_URL" value="G:\mywork\Charts\bin-debug\demo.html"/>
+<stringAttribute key="com.adobe.flexbuilder.debug.ATTR_RUN_URL" value="D:\mywork\Charts\bin-debug\demo.html"/>
 <booleanAttribute key="com.adobe.flexbuilder.debug.ATTR_USE_DEFAULT_URLS" value="false"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/Charts"/>

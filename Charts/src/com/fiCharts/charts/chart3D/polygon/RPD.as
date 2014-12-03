@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart3D.polygon
 	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.primitives.Box;
 	
+	import com.fiCharts.charts.chart3D.ZObjectController;
 	import com.fiCharts.charts.common.IChart;
 	
 	import flash.display.Sprite;
@@ -28,12 +29,13 @@ package com.fiCharts.charts.chart3D.polygon
 		
 		private var polygonDiagram:RegularPolygonDiagram;
 		
-		private var _fanContent:Array = 
-			[{name:"服务",
-				fan:[{label:"本科",value:2},{label:"保障维修",value:3},{label:"片区规划",value:4},{label:"物业管理",value:5}]},
-				{name:"体验",fan:[{label:"本科",value:2},{label:"21-31岁",value:3}]},
-				{name:"价格",fan:[{label:"本科",value:5}]},
-				{name:"情感",fan:[{label:"本科",value:3}]}];
+		private var zController:ZObjectController;
+		
+//		private var _fanContent:Array = 
+//			[{name:"服务",fan:[{label:"本科",value:2},{label:"保障维修",value:3},{label:"片区规划",value:4},{label:"物业管理",value:5}]},
+//				{name:"体验",fan:[{label:"本科",value:2},{label:"21-31岁",value:3}]},
+//				{name:"价格",fan:[{label:"本科",value:5}]},
+//				{name:"情感",fan:[{label:"本科",value:3}]}];
 		
 		public function RPD()
 		{
@@ -50,6 +52,7 @@ package com.fiCharts.charts.chart3D.polygon
 				
 				camera = new Camera3D(0.1, 10000);
 				camera.view = new View(chartWidth, chartHeight, false, BG, 1, ANTIALIAS);
+				camera.view.mouseEnabled = false;
 				addChild(camera.view);
 				
 				camera.view.hideLogo();
@@ -67,10 +70,28 @@ package com.fiCharts.charts.chart3D.polygon
 				polygonDiagram = new RegularPolygonDiagram(18,200);
 				polygonDiagram.data = [820,431,291,210,200,200,100,100,300];
 				
-				polygonDiagram.setFanContent(_fanContent);
+				polygonDiagram.setFanContent(xmlToArray(this.dataXML));
 				rootContainer.addChild(polygonDiagram);
 				updateContext();
+				
+				zController = new ZObjectController(this,null,polygonDiagram);
 			}
+		}
+		
+		private function xmlToArray(data:XML):Array
+		{
+			var arr:Array = new Array();
+			for each(var xml:XML in XMLList(data.elements())){
+				var p:Object = new Object();
+				p.name = xml.@label[0];
+				p.fan = new Array();
+				for each(var t:XML in xml.children()){
+					p.fan.push({label:t.@label[0], value:t.@value[0]});
+				}
+				
+				arr.push(p);
+			}
+			return arr;
 		}
 		
 		private function onContextCreate(e:Event):void 
@@ -94,6 +115,9 @@ package com.fiCharts.charts.chart3D.polygon
 			
 			if(polygonDiagram)
 			{
+				if(zController)
+					zController.update();
+				
 				polygonDiagram.render(stage3D, camera, _uiCtner);
 			}
 			
@@ -135,22 +159,30 @@ package com.fiCharts.charts.chart3D.polygon
 			return false;
 		}
 		
+		private var _configXML:XML;
 		public function set configXML(value:XML):void
 		{
+			_configXML = value;
+			
+			if (configXML.hasOwnProperty('data') && configXML.data.children().length())
+				this.dataXML = XML(configXML.data.toXMLString());
 		}
 		
 		public function get configXML():XML
 		{
-			return null;
+			return _configXML;
 		}
 		
+		
+		private var _dataXML:XML;
 		public function set dataXML(value:XML):void
 		{
+			_dataXML = value;
 		}
 		
 		public function get dataXML():XML
 		{
-			return null;
+			return _dataXML;
 		}
 		
 		public function get dataVOes():Vector.<Object>

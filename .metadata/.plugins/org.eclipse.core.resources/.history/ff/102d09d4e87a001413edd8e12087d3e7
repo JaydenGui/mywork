@@ -1,0 +1,7 @@
+<config>
+	<legend enable='true' position='left'/>
+    <data>
+        <set label="Nokia" value="4.171" color='#000000'/>
+    </data>
+ </config>
+                

@@ -1,0 +1,11 @@
+<config>
+	<legend enable='true' position='left'/>
+    <data>
+        <set label="服务">
+        	<fan label="本科" value="2"/>
+        	<fan label="本科" value="2"/>
+        	<fan label="本科" value="2"/>
+        </set>
+    </data>
+ </config>
+                

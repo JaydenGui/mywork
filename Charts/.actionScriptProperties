@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="Polygon3D.as" projectUUID="1e34926a-70c0-4521-99b4-97d7a3851050" version="10">
-  <compiler additionalCompilerArguments="-locale zh_CN -swf-version 13" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+<actionScriptProperties mainApplicationPath="Polygon3D.as" projectUUID="1e34926a-70c0-4521-99b4-97d7a3851050" version="6">
+  <compiler additionalCompilerArguments="-locale zh_CN -swf-version 13" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -41,5 +41,4 @@
   </applications>
   <modules/>
   <buildCSSFiles/>
-  <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>
