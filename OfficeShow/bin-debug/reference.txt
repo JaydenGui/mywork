@@ -1,0 +1,18 @@
+﻿12.31
+1.媒体特性
+加大了鼠标转动的距离。加上鼠标上下拖动镜头
+2.OfficeShow.swf|OfficeShowNoDirect.swf 加上了js回调函数"offficeInitCompleteCall"。当3d显卡准备好时，调用html页面中的js函数offficeInitCompleteCall(需要你来加)。//注 如果保持原样不加这个函数也不要紧，不会报错。
+
+============
+12.28
+1.行业观察
+{"cate":"汽车","brand":[{"radius":60,"color":0,"inner":[25,50,75],"position":[135,166],"name":"宝马","logo-url":"../res/奥迪.png"},{"radius":80,"color":1,"inner":[25,50,75],"position":[166,135],"name":"宝马","logo-url":"../res/宝马.png"}]}
+//color 0-6 参考图 从左到右从上到下
+//radius 最好不要小于60，不好看
+//position 注意不要出框
+
+2.媒体特性
+[{cate:"微博",data:[{x:10,y:1,z:50}]},{cate:"搜索引擎",data:[{x:10,y:2,z:50},{x:50,y:2,z:100}]}]
+//y 值小的会排到前面
+//z 最高为100
+//x 最大100

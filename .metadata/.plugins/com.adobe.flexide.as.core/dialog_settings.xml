@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="flexbuilder.newclass.interface.settings">
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History&gt;&#x0D;&#x0A;&lt;historyRootNode&gt;&#x0D;&#x0A;&lt;infoNode data=&quot;com.fiCharts.charts.common.IChart&quot; isClass=&quot;false&quot;/&gt;&#x0D;&#x0A;&lt;/historyRootNode&gt;&#x0D;&#x0A;&lt;/History&gt;" key="History"/>
+		<section name="DialogBoundsSettings">
+			<item value="600" key="DIALOG_WIDTH"/>
+			<item value="-13" key="DIALOG_Y_ORIGIN"/>
+			<item value="-38" key="DIALOG_X_ORIGIN"/>
+			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="1|微软雅黑|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|微软雅黑" key="DIALOG_FONT_NAME"/>
+		</section>
+	</section>
+	<section name="flexide.as.quick.outline.settings">
+		<item value="500" key="com.adobe.flexide.as.core.ui.outliner.QuickActionScriptOutlineDialogDIALOG_WIDTH"/>
+		<item value="400" key="com.adobe.flexide.as.core.ui.outliner.QuickActionScriptOutlineDialogDIALOG_HEIGHT"/>
+		<item value="562" key="com.adobe.flexide.as.core.ui.outliner.QuickActionScriptOutlineDialogDIALOG_X_ORIGIN"/>
+		<item value="true" key="com.adobe.flexide.as.core.ui.outliner.QuickActionScriptOutlineDialogDIALOG_USE_PERSISTED_LOCATION"/>
+		<item value="true" key="com.adobe.flexide.as.core.ui.outliner.QuickActionScriptOutlineDialogDIALOG_USE_PERSISTED_SIZE"/>
+		<item value="238" key="com.adobe.flexide.as.core.ui.outliner.QuickActionScriptOutlineDialogDIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="flexbuilder.newclass.superclass.settings">
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History&gt;&#x0D;&#x0A;&lt;historyRootNode&gt;&#x0D;&#x0A;&lt;infoNode data=&quot;alternativa.engine3d.core.Object3D&quot; isClass=&quot;true&quot;/&gt;&#x0D;&#x0A;&lt;infoNode data=&quot;com.fiCharts.charts.chart2D.encry.CSB&quot; isClass=&quot;true&quot;/&gt;&#x0D;&#x0A;&lt;/historyRootNode&gt;&#x0D;&#x0A;&lt;/History&gt;" key="History"/>
+		<section name="DialogBoundsSettings">
+			<item value="600" key="DIALOG_WIDTH"/>
+			<item value="-13" key="DIALOG_Y_ORIGIN"/>
+			<item value="-66" key="DIALOG_X_ORIGIN"/>
+			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="1|微软雅黑|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|微软雅黑" key="DIALOG_FONT_NAME"/>
+		</section>
+	</section>
+</section>

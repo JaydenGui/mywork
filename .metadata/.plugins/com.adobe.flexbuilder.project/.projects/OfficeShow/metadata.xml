@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<projectMetadata>
+  <swf bgcolor="2b2937" fullPath="/OfficeShow/bin-debug/OfficeShow.swf" height="600" pageTitle="" width="800"/>
+  <swf bgcolor="2b2937" fullPath="/OfficeShow/bin-debug/OfficeShowNoDirect.swf" height="600" pageTitle="" width="800"/>
+  <generatedHTMLResources/>
+<swf bgcolor="ffffff" fullPath="/OfficeShow/bin-debug/OfficeShowApp.swf" height="100%" pageTitle="" width="100%"/>
+  <swf bgcolor="ffffff" fullPath="/OfficeShow/bin-release/OfficeShowApp.swf" height="100%" pageTitle="" width="100%"/>
+</projectMetadata>

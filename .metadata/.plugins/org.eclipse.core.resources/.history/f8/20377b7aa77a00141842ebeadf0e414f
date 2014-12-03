@@ -1,0 +1,14 @@
+package
+{
+	import com.fiCharts.charts.chart2D.encry.CSB;
+	
+	public class Polygon3D extends CSB
+	{
+		public function Polygon3D()
+		{
+			super();
+		}
+		
+		
+	}
+}

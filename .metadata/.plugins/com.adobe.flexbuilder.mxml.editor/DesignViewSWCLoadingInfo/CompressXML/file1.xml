@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<ListDetails label="SWC Loading Details" projectName="CompressXML">
+
+
+<LoadedSetList label="LoadedSet List">
+
+
+<LoadingSet label="LoadingSet1:">
+
+
+<item  label="aircore.swc1449986385" path="G:\mywork\.metadata\.plugins\com.adobe.flexbuilder.codemodel\SwcCache\aircore.swc1449986385\library.swf"/>
+
+
+<item  label="applicationupdater.swc-1233570351" path="G:\mywork\.metadata\.plugins\com.adobe.flexbuilder.codemodel\SwcCache\applicationupdater.swc-1233570351\library.swf"/>
+
+
+<item  label="applicationupdater_ui.swc2146303705" path="G:\mywork\.metadata\.plugins\com.adobe.flexbuilder.codemodel\SwcCache\applicationupdater_ui.swc2146303705\library.swf"/>
+
+
+<item  label="servicemonitor.swc1330741809" path="G:\mywork\.metadata\.plugins\com.adobe.flexbuilder.codemodel\SwcCache\servicemonitor.swc1330741809\library.swf"/>
+
+
+<item  label="FiCharts(1.3.3).swc1787973489" path="G:\mywork\.metadata\.plugins\com.adobe.flexbuilder.codemodel\SwcCache\FiCharts(1.3.3).swc1787973489\library.swf"/>
+
+
+</LoadingSet>
+
+
+</LoadedSetList>
+
+
+<RemovedSetList label="RemovedSet List">
+
+
+<RemovedSet label="RemovedSet1:">
+
+
+<item  label="No Item present in this set"/>
+
+
+</RemovedSet>
+
+
+</RemovedSetList>
+
+
+</ListDetails>
+
+

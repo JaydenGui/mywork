@@ -1,0 +1,386 @@
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * If it is not possible or desirable to put the notice in a particular file, then You may include the notice in a location (such as a LICENSE file in a relevant directory) where a recipient would be likely to look for such a notice.
+ * You may add additional accurate notices of copyright ownership.
+ *
+ * It is desirable to notify that Covered Software was "Powered by AlternativaPlatform" with link to http://www.alternativaplatform.com/ 
+ *
+ */
+package com.officeShow {
+	
+	import com.officeShow.mountainShow.MountainDiagram;
+	import com.officeShow.mountainShow.MountainPolygon;
+	import com.officeShow.polygonShow.RegularPolygonDiagram;
+	import com.officeShow.polygonShow.ZObjectController;
+	
+	import flash.display.Sprite;
+	import flash.display.Stage3D;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
+	import flash.display3D.Context3DRenderMode;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.external.ExternalInterface;
+	import flash.geom.Matrix3D;
+	import flash.system.Security;
+	import flash.text.TextField;
+	
+	import alternativa.engine3d.core.Camera3D;
+	import alternativa.engine3d.core.Object3D;
+	import alternativa.engine3d.core.Resource;
+	import alternativa.engine3d.core.View;
+	
+	
+	/**
+	 * OfficeShowApp
+	 */
+	public class OfficeShowApp extends Sprite {
+		public static const BG:uint = 0x2B2937;
+//		public static const BG:uint = 0xffffff;
+		public static const ANTIALIAS:int = 4;
+		public static const POLYGON:String = "polygon";
+		public static const MOUNTAIN:String = "mountain";
+		public static const CIRCLE:String = "circle";
+		
+		private var _type:String;
+		
+		private var rootContainer:Object3D = new Object3D();
+		
+		private var camera:Camera3D;
+		private var stage3D:Stage3D;
+		
+		private var polygonDiagram:RegularPolygonDiagram;
+		private var mountainDiagram:MountainDiagram;
+//		private var circleDiagram:CircleUI;
+		
+		private var _uiCtner:Sprite;
+		
+		private var zController:ZObjectController;
+		
+		public function OfficeShowApp() {
+			//js call
+			Security.allowDomain("*");
+			Security.allowInsecureDomain("*");
+			var txt:TextField;
+			if(ExternalInterface.available)
+			{
+				ExternalInterface.marshallExceptions = true;
+				try
+				{
+					ExternalInterface.addCallback("setShowType",setShowTypeHandler);
+				}
+				catch(e:Error)
+				{
+					txt = new TextField();
+					txt.width = 200;
+					txt.textColor = 0xffffff;
+					txt.text = e.message;
+					this.addChild(txt);
+				}
+			}
+			else
+			{
+				txt = new TextField();
+				txt.textColor = 0xffffff;
+				txt.width = 200;
+				txt.text = "External interface is not available for this container";
+				this.addChild(txt);
+			}
+			
+			stage.align = StageAlign.TOP_LEFT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
+			// Camera and view
+			camera = new Camera3D(0.1, 10000);
+			camera.view = new View(stage.stageWidth, stage.stageHeight, false, BG, 1, ANTIALIAS);
+			addChild(camera.view);
+			
+			// Initial position
+//			camera.rotationX = -120*Math.PI/180;
+//			camera.rotationX = -110*Math.PI/180;
+//			camera.y = -400;
+//			camera.z = 200;
+			
+			rootContainer.addChild(camera);
+			
+			stage3D = stage.stage3Ds[0];
+			stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreate);
+			stage3D.requestContext3D(Context3DRenderMode.AUTO);
+			
+			camera.view.hideLogo();
+			
+			this.addEventListener(MouseEvent.DOUBLE_CLICK,clickHandler);
+			
+		}
+		
+		private function setShowTypeHandler(type:String,data:Object):void
+		{
+			var tData:Object = data is String?JSON.parse(String(data)):data;
+			showType(type,tData);
+		}
+		
+		private var _fanContent:Array = 
+			[{name:"服务",
+				fan:[{label:"本科",value:2},{label:"保障维修",value:3},{label:"片区规划",value:4},{label:"物业管理",value:5}]},
+				{name:"体验",fan:[{label:"本科",value:2},{label:"21-31岁",value:3}]},
+				{name:"价格",fan:[{label:"本科",value:5}]},
+				{name:"情感",fan:[{label:"本科",value:3}]}];
+		private var index:uint = 0;
+		private function clickHandler(e:MouseEvent):void
+		{
+			var types:Array = [MOUNTAIN,POLYGON,CIRCLE];
+//			showType(types[index++%3]);
+			//showType(MOUNTAIN,[{cate:"搜索引擎",data:[{x:10,y:2,z:50},{x:50,y:2,z:100}]},{cate:"微博",data:[{x:10,y:1,z:50}]},{cate:"微博",data:[{x:10,y:3,z:50}]},{cate:"微博",data:[{x:10,y:4,z:50}]},{cate:"微博",data:[{x:10,y:5,z:50}]},{cate:"微博",data:[{x:10,y:6,z:50}]},{cate:"微博",data:[{x:10,y:7,z:50}]}]);
+			
+//			showType(MOUNTAIN,[]);
+			//showType(POLYGON,_fanContent);
+		}
+		
+		private function parserMountainData(data:Object):Array
+		{
+			var tData:Array = data as Array;
+			var max:int = 480;
+			if(tData && tData.length>0)
+			{
+				var re:Array = [];
+				re.push(tData.length);
+				
+				var txts:Array = [];
+				var pos2DList:Array = [];
+				var height2DList:Array = [];
+				var yList:Array = [];
+				for each(var item:Object in tData)
+				{
+					txts.push(item.cate);
+					yList.push(item.data[0].y);
+					var posList:Array = [];
+					var heightList:Array = [];
+					for (var i:int = 0; i < item.data.length;++i)
+					{
+						var d:Array = item.data as Array;
+						if(i == 0)
+						{
+							if(d[i].z != 0)
+							{
+								posList.push(-max/2);
+								heightList.push(0);
+							}
+						}
+						
+						posList.push(-max/2+d[i].x*max/100%(max+1));
+						heightList.push(d[i].z*MountainPolygon.MAX_HEIGHT/100%(MountainPolygon.MAX_HEIGHT+1));
+						
+						if(i == d.length-1)
+						{
+							if(d[i].z != 0)
+							{
+								posList.push(-max/2+max);
+								heightList.push(0);
+							}
+						}
+					}
+					pos2DList.push(posList);
+					height2DList.push(heightList);
+				}
+				
+				var sortResult:Array = yList.sort(Array.RETURNINDEXEDARRAY|Array.NUMERIC);
+				
+				var rePos2DList:Array = [];
+				var reHeight2DList:Array = [];
+				var reTxts:Array = [];
+				for each(var sortIndex:int in sortResult)
+				{
+					rePos2DList.push(pos2DList[sortIndex]);
+					reHeight2DList.push(height2DList[sortIndex]);
+					reTxts.push(txts[sortIndex]);
+				}
+				
+				return [reTxts.length,reTxts,rePos2DList,reHeight2DList];
+			}
+			
+			return null;
+		}
+		
+		private function showType(type:String,data:Object):void
+		{
+			clear();
+			_uiCtner = new Sprite();
+			this.addChild(_uiCtner);
+			switch(type)
+			{
+				case POLYGON:
+					_type = type;
+					camera.rotationX = -110*Math.PI/180;
+					camera.y = -400;
+					camera.z = 200;
+					polygonDiagram = new RegularPolygonDiagram(18,200);
+//					polygonDiagram.data = [300+Math.random()*700,300+Math.random()*500,200+100*Math.random(),200+100*Math.random(),200,200,100,100,300];
+					polygonDiagram.data = [820,431,291,210,200,200,100,100,300];
+					
+					polygonDiagram.setFanContent(data as Array);
+					rootContainer.addChild(polygonDiagram);
+					updateContext();
+					zController = new ZObjectController(this,null,polygonDiagram);
+					break;
+				case MOUNTAIN:
+					_type = type;
+//					camera.rotationX = 0;
+					camera.setPosition(100,-600,200);
+					camera.lookAt(0,0,0);
+					var mData:Object = parserMountainData(data);
+					if(!mData)
+						return;
+					mountainDiagram = new MountainDiagram(_uiCtner,mData[0],mData[1],mData[2],mData[3]);
+					rootContainer.addChild(mountainDiagram);
+					var matrix:Matrix3D = mountainDiagram.matrix;
+//					matrix.appendRotation(-10,new Vector3D(0,0,1));
+//					matrix.appendTranslation(100,-100,40);
+//					matrix.appendTranslation(-mountainDiagram.centerPos.x/2,-mountainDiagram.centerPos.y/2,0);
+//					mountainDiagram.matrix = matrix;
+					updateContext();
+//					zController = new ZObjectController(this,mountainDiagram,0.6,1.274);
+					zController = new ZObjectController(this,camera,mountainDiagram,0.55,1.35);
+					break;
+				case CIRCLE:
+					_type = type;
+					if(stage.stageWidth>0)
+					{
+//						circleDiagram = new CircleUI(stage.stageWidth,stage.stageHeight);
+//						_uiCtner.addChild(circleDiagram);
+//						var radius:uint = 77;
+//						var rect:Rectangle = circleDiagram.getValidRect();
+//						rect.left += radius;
+//						rect.top += radius;
+//						rect.right -= radius;
+//						rect.bottom -= radius;
+//						for(var i:int = 0;i < 5;++i)
+//						{
+//							circleDiagram.addBtn((i+1).toString(),null,rect.left+rect.width*Math.random(),rect.top+rect.height*Math.random());
+//						}
+					}
+					break;
+				default:
+					_type = "";
+			}
+		}
+		
+		private function clear():void
+		{
+			if(_uiCtner && _uiCtner.parent)
+			{
+				_uiCtner.parent.removeChild(_uiCtner);
+			}
+			
+			if(polygonDiagram && polygonDiagram.parent)
+			{
+				polygonDiagram.parent.removeChild(polygonDiagram);
+			}
+			
+			if(mountainDiagram && mountainDiagram.parent)
+			{
+				mountainDiagram.parent.removeChild(mountainDiagram);
+			}
+			
+//			if(circleDiagram && circleDiagram.parent)
+//			{
+//				circleDiagram.parent.removeChild(circleDiagram);
+//			}
+			
+			_uiCtner = null;
+			polygonDiagram = null;
+			mountainDiagram = null;
+//			circleDiagram = null;
+		}
+		
+		private function jsChangeHandler(scaleZ:Number):void
+		{
+//			box.scaleZ = scaleZ;
+		}
+		
+		private function updateContext():void
+		{
+			if(stage3D && stage3D.context3D)
+			{
+				for each (var resource:Resource in rootContainer.getResources(true)) {
+					resource.upload(stage3D.context3D);
+				}
+				
+				if(_type == POLYGON)
+				{
+					if(polygonDiagram)
+						polygonDiagram.changePolygonOnce(stage3D.context3D);
+				}
+				else if(_type == MOUNTAIN)
+				{
+					if(mountainDiagram)
+						mountainDiagram.startZAnimation();
+				}
+			}
+		}
+		
+		private function onContextCreate(e:Event):void 
+		{
+			updateContext();
+			
+			// Listeners
+			if(!stage.hasEventListener(Event.ENTER_FRAME))
+			{
+				stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+				
+				try
+				{
+					ExternalInterface.call("offficeInitCompleteCall");
+				}catch(e:Error)
+				{
+//					var txt:TextField = new TextField();
+//					txt.width = 300;
+//					txt.textColor = 0xffffff;
+//					txt.y = 30;
+//					txt.text = e.message;
+//					this.addChild(txt);
+				}
+			}
+		}
+		
+		private function onEnterFrame(e:Event):void {
+			// Width and height of view
+			camera.view.width = stage.stageWidth;
+			camera.view.height = stage.stageHeight;
+			
+			if(!stage3D.context3D)
+				return;
+			
+			if(_type == MOUNTAIN)
+			{
+				if(mountainDiagram)
+				{
+					if(zController)
+						zController.update();
+					mountainDiagram.update(stage3D.context3D,camera,_uiCtner);
+				}
+			}
+			else if(_type == POLYGON)
+			{
+				if(polygonDiagram)
+				{
+					if(zController)
+						zController.update();
+					polygonDiagram.render(stage3D,camera,_uiCtner);
+				}
+			}
+			else if(_type == CIRCLE)
+			{
+//				if(!circleDiagram && stage.stageWidth>0)
+//				{
+//					showType(_type);
+//				}
+			}
+			
+			// Render
+			camera.render(stage3D);
+			
+			
+		}
+		
+	}
+}

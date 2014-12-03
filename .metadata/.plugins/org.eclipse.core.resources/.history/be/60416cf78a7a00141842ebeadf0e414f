@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.fiCharts.utils.dec.CCB;
+			import com.fiCharts.utils.dec.ICipher;
+			import com.fiCharts.utils.dec.IPad;
+			import com.fiCharts.utils.dec.IVMode;
+			import com.fiCharts.utils.dec.KP;
+			import com.fiCharts.utils.dec.Made;
+			import com.fiCharts.utils.dec.SEA;
+			import com.fiCharts.utils.dec.VI;
+			
+			
+			
+			private function compressLicenseXML(event:MouseEvent):void
+			{
+				file.addEventListener(Event.SELECT, licenseFileSelected, false, 0, true);
+				file.browse();
+			}
+			
+			private function licenseFileSelected(evt:Event):void
+			{
+				var licenseFile:ByteArray = readFile(this.file);
+				licenseMD5 = new Made().fuck(licenseFile);
+				file.removeEventListener(Event.SELECT, licenseFileSelected);
+				saveFile(licenseFile);
+				
+				licenseBtn.enabled = false;
+				configBtn.enabled = true;
+			}
+			
+			private var licenseMD5:ByteArray;
+			
+			protected function compressConfigXML(event:MouseEvent):void
+			{
+				file.addEventListener(FileListEvent.SELECT_MULTIPLE, multiConfigFileSelected, false, 0, true);
+				file.browseForOpenMultiple("选择多个配置文件");
+			}
+			
+			// 用license文件的MD5码加密配置文件
+			private function multiConfigFileSelected(evt:FileListEvent):void
+			{
+				for each (var file:File in evt.files)
+				{
+					var configFile:ByteArray = readFile(file);
+					var pad:IPad = new KP;
+					var mode:ICipher = new VI(new CCB(new SEA(licenseMD5), pad) as IVMode);
+					pad.setBlockSize(mode.getBlockSize());
+					mode.jj(configFile);
+					
+					saveFile(configFile);
+				}
+				
+				file.removeEventListener(Event.SELECT, multiConfigFileSelected);
+				configBtn.enabled = false;
+				resetBtn.enabled = true;
+			}
+			
+			private function readFile(file:File):ByteArray
+			{
+				var pathArrar:Array = file.nativePath.split('\\');
+				fileName = pathArrar.pop().split('.')[0];
+				sourceNativePath = pathArrar.join('\\') + '\\';
+				
+				var myFileStream:FileStream = new FileStream();
+				var sourceCodeBytes:ByteArray = new ByteArray();
+				myFileStream.open(file, FileMode.READ);
+				myFileStream.readBytes(sourceCodeBytes, 0, myFileStream.bytesAvailable);
+				myFileStream.close();
+				
+				sourceCodeBytes.compress();
+				
+				return sourceCodeBytes;
+			}
+			
+			private function saveFile(fileByte:ByteArray):void
+			{
+				var myFileStream:FileStream = new FileStream();
+				var productFile:File = File.documentsDirectory.resolvePath(fileName + '.z');
+				myFileStream.open(productFile, FileMode.WRITE);
+				myFileStream.writeBytes(fileByte, 0, fileByte.length);
+				myFileStream.close();
+			}
+			
+			private var sourceNativePath:String;
+			
+			private var fileName:String;
+			
+			private var file:File = new File;
+			
+			protected function retry(event:MouseEvent):void
+			{
+				resetBtn.enabled = false;
+				this.licenseBtn.enabled = true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Label text="压缩配置文件和license文件，并用压缩后license的md5码加密压缩后的配置文件" left="5" top="5"/>
+	<mx:VBox verticalCenter="0" horizontalCenter="0">
+		<s:Button id="licenseBtn" label="压缩License" click="compressLicenseXML(event)" 
+				  horizontalCenter="0" verticalCenter="0"/>
+		
+		<s:Button id="configBtn" enabled="false" label="压缩配置文件" click="compressConfigXML(event)" 
+				  horizontalCenter="0" verticalCenter="0"/>
+		
+		<s:Button id="resetBtn" label="重置" enabled="false" horizontalCenter="0" verticalCenter="0" click="retry(event)"/>
+	</mx:VBox>
+	
+</s:WindowedApplication>

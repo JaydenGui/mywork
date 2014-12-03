@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<projectMetadata>
+  <swf bgcolor="ffffff" fullPath="/Charts/bin-debug/Charts.swf" height="100%" pageTitle="" width="100%"/>
+  <generatedHTMLResources/>
+  <swf bgcolor="ffffff" fullPath="/Charts/bin-debug/Chart2D.swf" height="100%" pageTitle="" width="100%"/>
+  <swf bgcolor="ffffff" fullPath="/Charts/bin-debug/Pie2D.swf" height="100%" pageTitle="" width="100%"/>
+  <swf bgcolor="ffffff" fullPath="/Charts/bin-debug/FiCharts.swf" height="100%" pageTitle="" width="100%"/>
+  <swf bgcolor="ffffff" fullPath="/Charts/bin-release/FiCharts.swf" height="100%" pageTitle="" width="100%"/>
+  <swf bgcolor="ffffff" fullPath="/Charts/bin-debug/Polygon3D.swf" height="100%" pageTitle="" width="100%"/>
+</projectMetadata>

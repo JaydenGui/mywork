@@ -1,0 +1,216 @@
+package com.officeShow.polygonShow
+{
+	import com.greensock.TweenLite;
+	
+	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
+	import flash.display.Stage;
+	import flash.display.Stage3D;
+	import flash.display3D.Context3D;
+	import flash.geom.Vector3D;
+	
+	import alternativa.engine3d.core.Camera3D;
+	import alternativa.engine3d.core.Object3D;
+	import alternativa.engine3d.core.Resource;
+	import alternativa.engine3d.materials.FillMaterial;
+	import alternativa.engine3d.objects.WireFrame;
+	import alternativa.engine3d.resources.WireGeometry;
+	
+	public class RegularPolygonDiagram extends Object3D
+	{
+		public static const MAX_VALID_VERTICE:int = 4;
+		private var zDistance:Number = 15;
+		private var polygon:RegularPolygon;
+		private var text:FanShapedBtn;
+		private var btnList:Vector.<FanShapedBtn>;
+		private var colors:Array = [0x5C88AD,
+												0x63BBC7,0x50A8B4,
+												0x8680C8,0x7973BB,
+												0xC38D4D,0xE1B47D,
+												0xE2E3E5,0xEFF0F2,
+												0xE2E3E5,0xEFF0F2,
+												0xE2E3E5,0xEFF0F2,
+												0xE2E3E5,0xEFF0F2,
+												0xE2E3E5,0xEFF0F2,
+												0x71A1C7];
+		
+		private var wireList:Vector.<WireFrame>;
+		private var wireColors:Array = [0x6C6A78,0x6C6A78];
+		private var pointCtner:Sprite = new Sprite();
+		
+		public var data:Array = [1000,800,600,300,200,200,100,100,300];
+		public function RegularPolygonDiagram(numFace:uint,radius:Number)
+		{
+			super();
+			
+			polygon = new RegularPolygon(numFace,radius);
+			
+			for(var i:int = 0; i < numFace; ++i)
+			{
+				var material:FillMaterial = new FillMaterial(colors[i]);
+				polygon.getSurface(i).material = material;
+			}
+			
+			this.addChild(polygon);
+			
+			wireList = new Vector.<WireFrame>(2);
+			wireList[0] = WireFrame.createEdges(polygon,0x6C6A78,1,1);
+			wireList[1] = WireFrame.createEdges(polygon,0x6C6A78,1,1);
+			wireList[1].z += zDistance;
+//			for each(var wire:WireFrame in wireList)
+//			{
+//				this.addChild(wire);
+//			}
+			this.addChild(wireList[1]);
+			
+//			setFanContent(_fanContent);
+		}
+		
+//		private var _fanContent:Array = [{name:"服务",fan:["本科","21-31岁","7000-9000元","白领"]},
+//			{name:"体验",fan:["本科","21-31岁","7000-9000元"]},
+//			{name:"价格",fan:["本科","21-31岁"]},
+//			{name:"情感",fan:["本科","21-31岁","7000-9000元","白领","白领","白领"]}];
+		
+		private var _fanContent:Array = 
+			[{name:"服务",
+				fan:[{label:"本科",value:2},{label:"21-31岁",value:3},{label:"7000-9000元",value:2},{label:"白领",value:5}]},
+			{name:"体验",fan:[{label:"本科",value:2},{label:"21-31岁",value:3}]},
+			{name:"价格",fan:[{label:"本科",value:5}]},
+			{name:"情感",fan:[{label:"本科",value:3}]}];
+		
+		public function setFanContent(list:Array):void
+		{
+			if(btnList)
+			{
+				for each(var lastBtn:FanShapedBtn in btnList)
+				{
+					if(lastBtn.parent)
+						lastBtn.parent.removeChild(lastBtn);
+				}
+			}
+			
+			if(!list)
+				return;
+			btnList = new Vector.<FanShapedBtn>();
+			for(var i:int = 0; i < list.length; ++i)
+			{
+				if(i<MAX_VALID_VERTICE)
+				{
+					btnList.push(new FanShapedBtn(list[i]["name"],list[i]["fan"]));
+				}
+			}
+		}
+		
+		public function changePolygonOnce(context3D:Context3D):void
+		{
+			if(data && data.length == 9)
+			{
+				new RegularPolygonAnimation(polygon,data);
+			}
+			else
+			{
+				new RegularPolygonAnimation(polygon,[1000,800,600,300,200,200,100,100,300]);
+			}
+			polygon.updatePos(context3D);
+			new RegularPolygonShapeChange(polygon);
+			polygon.updatePos(context3D);
+			
+			polygon.scaleZ = 0;
+			TweenLite.to(polygon,1.5,{scaleZ:1});
+		}
+		
+		private function updatePolygon(context3D:Context3D):void
+		{
+			new RegularPolygonAnimation(polygon,[1000,800,600,300,200,200,100,100,300]);
+			polygon.updatePos(context3D);
+		}
+		
+		private function updateWire(context3D:Context3D):void
+		{
+			for (var i:uint = 0; i < wireList.length;++i)
+			{
+				if(i == 0)
+					continue;
+				
+				this.removeChild(wireList[i]);
+				wireList[i] = WireFrame.createEdges(polygon,wireColors[i],1,0.5);
+				if(i == 1)
+					wireList[i].z += zDistance;
+				this.addChild(wireList[i]);
+				for each(var res:Resource in  wireList[i].getResources(true,WireGeometry))
+				{
+					res.upload(context3D);
+				}
+			}
+		}
+		
+		private function updateUI(camera:Camera3D,uiCtner:DisplayObjectContainer):void
+		{
+			if(!btnList)
+				return;
+			
+			if(!pointCtner.parent)
+			{
+				uiCtner.addChild(pointCtner);
+			}
+			
+			for(var i:int=0;i<btnList.length;++i)
+			{
+				var pos:Vector3D = polygon.getVertexPos(i*2+1);
+				pos.z += zDistance*2;
+				var uiPos:Vector3D = localToGlobal(pos);
+				uiPos = camera.projectGlobal(uiPos);
+				btnList[i].x = uiPos.x;
+				btnList[i].y = uiPos.y;
+				if(btnList[i].parent != uiCtner)
+				{
+					uiCtner.addChild(btnList[i]);
+				}
+			}
+			
+			pointCtner.graphics.clear();
+			var pRadius:int = 3;
+			pointCtner.graphics.beginFill(0x6C6B79);
+			for(var index:int = 0; index < polygon.geometry.numVertices; ++index)
+			{
+				var pointPos:Vector3D = polygon.getVertexPos(index);
+				pointPos.z += zDistance;
+				pointPos = localToGlobal(pointPos);
+				pointPos = camera.projectGlobal(pointPos);
+				pointCtner.graphics.drawCircle(pointPos.x,pointPos.y,pRadius);
+			}
+			pointCtner.graphics.endFill();
+			
+		}
+		
+		private var tween:TweenLite;
+		public function render(stage3D:Stage3D,camera:Camera3D,uiCtner:DisplayObjectContainer):void
+		{
+			if(!this.parent)
+				return;
+			if(!tween)
+			{
+				uiCtner.mouseChildren = false;
+				tween = TweenLite.to(this,1.5,{rotationZ:-Math.PI*1.6,onComplete:openingAnimatonComplete,onCompleteParams:[camera,uiCtner]});//-5.2 3.6
+			}
+			else if(!tween.active)
+			{
+				updateUI(camera,uiCtner);
+			}
+			
+//			updatePolygon(stage3D.context3D);
+			updateWire(stage3D.context3D);
+//			updateUI(camera,uiCtner);
+			
+//			textSprite.z +=0.2
+		}
+		
+		private function openingAnimatonComplete(camera:Camera3D,uiCtner:DisplayObjectContainer):void
+		{
+			uiCtner.mouseChildren = true;
+			uiCtner.alpha = 0;
+			updateUI(camera,uiCtner);
+			TweenLite.to(uiCtner,1,{alpha:1});
+		}
+	}
+}

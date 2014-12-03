@@ -1,0 +1,28 @@
+<license>
+	<!-- Trial, web, Intranet, Enterprise, Enterprise_Plus, Desk, App-->
+	<type>web</type>
+	<servers>
+		<url>www.ficharts.com</url>
+		<url>ficharts.com</url>
+		<url>apps.weibo.com</url>
+		<url>biaomei.sinaapp.com</url>
+		<url>ficharts.com</url>
+		<url>localhost:8088</url>
+		<url>127.0.0.1</url>
+
+		<url>113.19.81.6</url>
+		<url>192.168.10.158</url>
+		
+		<!-- 猎头者 -->
+		<url>115.28.136.63</url>
+		<url>xiaozhao.lietouzhe.com</url>
+		
+		<!-- 陈志刚，印度 -->
+		<url>117.218.1.57</url>
+		<url>192.168.1.12</url>
+		
+		<!-- 世俗看客，旗舰版 -->
+		<url>61.132.106.54</url>
+	</servers>
+	<desc></desc>
+</license>

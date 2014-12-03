@@ -1,0 +1,178 @@
+package com.fiCharts.charts.chart3D.polygon
+{
+	import alternativa.engine3d.core.Camera3D;
+	import alternativa.engine3d.core.Object3D;
+	import alternativa.engine3d.core.Resource;
+	import alternativa.engine3d.core.View;
+	
+	import com.fiCharts.charts.common.IChart;
+	
+	import flash.display.Sprite;
+	import flash.display.Stage3D;
+	import flash.display3D.Context3DRenderMode;
+	import flash.events.Event;
+	
+	public class RPD extends Sprite implements IChart
+	{
+		private var camera:Camera3D;
+		private var stage3D:Stage3D;
+		public static const BG:uint = 0x2B2937;
+		public static const ANTIALIAS:int = 4;
+		private var rootContainer:Object3D = new Object3D();
+		
+		private var _uiCtner:Sprite;
+		
+		private var polygonDiagram:RegularPolygonDiagram;
+		
+		private var _fanContent:Array = 
+			[{name:"服务",
+				fan:[{label:"本科",value:2},{label:"保障维修",value:3},{label:"片区规划",value:4},{label:"物业管理",value:5}]},
+				{name:"体验",fan:[{label:"本科",value:2},{label:"21-31岁",value:3}]},
+				{name:"价格",fan:[{label:"本科",value:5}]},
+				{name:"情感",fan:[{label:"本科",value:3}]}];
+		
+		public function RPD()
+		{
+			super();
+			
+			_uiCtner = new Sprite();
+			this.addChild(_uiCtner);
+		}
+		
+		public function render():void
+		{
+			if(camera == null){
+			
+				
+				camera = new Camera3D(0.1, 10000);
+				
+				camera.rotationX = -110*Math.PI/180;
+				camera.y = -400;
+				camera.z = 200;
+				
+				camera.view = new View(100, 100, false, BG, 1, ANTIALIAS);
+				addChild(camera.view);
+				
+				camera.view.hideLogo();
+				
+				rootContainer.addChild(camera);
+				
+				stage3D = stage.stage3Ds[0];
+				stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreate);
+				stage3D.requestContext3D(Context3DRenderMode.AUTO);
+				
+				polygonDiagram = new RegularPolygonDiagram(18,200);
+				polygonDiagram.data = [820,431,291,210,200,200,100,100,300];
+				
+				polygonDiagram.setFanContent(_fanContent);
+				rootContainer.addChild(polygonDiagram);
+				updateContext();
+			}
+		}
+		
+		private function onContextCreate(e:Event):void 
+		{
+			updateContext();
+			
+			if(!stage.hasEventListener(Event.ENTER_FRAME))
+			{
+				stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+				
+			}
+		}
+		
+		private function onEnterFrame(e:Event):void {
+			if(!stage3D.context3D)
+				return;
+			
+			if(polygonDiagram)
+			{
+				polygonDiagram.render(stage3D, camera, _uiCtner);
+			}
+		}
+		
+		private function updateContext():void
+		{
+			if(stage3D && stage3D.context3D)
+			{
+				for each (var resource:Resource in rootContainer.getResources(true)) {
+					resource.upload(stage3D.context3D);
+				}
+				
+					if(polygonDiagram){
+						polygonDiagram.changePolygonOnce(stage3D.context3D);						
+					}
+			}
+		}
+		
+		public function setStyle(value:String):void
+		{
+		}
+		
+		public function setCustomStyle(value:XML):void
+		{
+		}
+		
+		public function scaleData(startValue:Object, endValue:Object):void
+		{
+		}
+		
+		public function setDataScalable(value:Boolean):void
+		{
+		}
+		
+		public function ifDataScalable():Boolean
+		{
+			return false;
+		}
+		
+		public function set configXML(value:XML):void
+		{
+		}
+		
+		public function get configXML():XML
+		{
+			return null;
+		}
+		
+		public function set dataXML(value:XML):void
+		{
+		}
+		
+		public function get dataXML():XML
+		{
+			return null;
+		}
+		
+		public function get dataVOes():Vector.<Object>
+		{
+			return null;
+		}
+		
+		public function set dataVOes(value:Vector.<Object>):void
+		{
+		}
+		
+		private var _chartWidth:Number = 0;
+		public function set chartWidth(value:Number):void
+		{
+			_chartWidth = value;
+		}
+		
+		public function get chartWidth():Number
+		{
+			return _chartWidth;
+		}
+		
+		private var _chartHeight:Number = 0;
+		public function get chartHeight():Number
+		{
+			return _chartHeight;
+		}
+		
+		public function set chartHeight(value:Number):void
+		{
+			_chartHeight = value;
+		}
+	}
+}
