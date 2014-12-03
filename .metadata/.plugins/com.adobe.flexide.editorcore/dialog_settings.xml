@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="333" key="com.adobe.flexbuilder.help.FlexSDKPreferencePage.columnWidth1"/>
+	<item value="104" key="com.adobe.flexbuilder.help.FlexSDKPreferencePage.columnWidth0"/>
+	<item value="1" key="com.adobe.flexbuilder.help.FlexSDKPreferencePage.sortColumn"/>
+	<section name="ADD_SDK_DIALOG_SECTION">
+		<item value="485" key="DIALOG_WIDTH"/>
+		<item value="139" key="DIALOG_Y_ORIGIN"/>
+		<item value="212" key="DIALOG_HEIGHT"/>
+		<item value="151" key="DIALOG_X_ORIGIN"/>
+		<item value="1|微软雅黑|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|微软雅黑" key="DIALOG_FONT_NAME"/>
+	</section>
+</section>
