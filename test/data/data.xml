@@ -1,0 +1,27 @@
+<config title='' ySuffix='K'>
+    <axis>
+        <x type="field" title='' />
+        <y type="linear" title=''/>
+    </axis>
+    <series>
+        <line name='国内' xField='label' yField='value1'/>
+        <line name='国外' xField='label' yField='value2'/>
+        <line name='江苏' xField='label' yField='value3'/>
+        <line name='宽频' xField='label' yField='value4'/>
+    </series>
+    <legend enable='true'/>
+    <data>
+        <set label='8:00' value1='279' value2='400' value3='300' value4='800'/>
+        <set label='8:10' value1='410' value2='300' value3='300' value4='800'/>
+        <set label='8:20' value1='325' value2='250' value3='300' value4='800'/>
+        <set label='8:30' value1='572' value2='100' value3='300' value4='800'/>
+        <set label='8:40' value1='629' value2='300' value3='300' value4='800'/>
+        <set label='8:50' value1='710' value2='400' value3='300' value4='800'/>
+        <set label='9:00' value1='489' value2='600' value3='300' value4='800'/>
+        <set label='9:10' value1='635' value2='800' value3='300' value4='800'/>
+        <set label='9:20' value1='750' value2='600' value3='300' value4='800'/>
+        <set label='9:30' value1='600' value2='400' value3='300' value4='800'/>
+        <set label='9:40' value1='760' value2='350' value3='300' value4='800'/>
+        <set label='9:50' value1='950' value2='300' value3='300' value4='800'/>
+    </data>
+</config>
